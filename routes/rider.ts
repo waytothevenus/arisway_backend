@@ -4,32 +4,29 @@ import { v4 as uuidv4 } from "uuid";
 import dotenv from "dotenv";
 
 import {
-  getPartnerSwagger,
-  deletePartnerSwagger,
-  createPartnerSwagger,
-} from "../swagger/partner";
-import {
-  createPartnerSchema,
-  deletePartnerSchema,
-} from "../validation/partner";
-import Partner from "../models/parter";
+  getRiderSwagger,
+  deleteRiderSwagger,
+  createRiderSwagger,
+} from "../swagger/rider";
+import { createRiderSchema, deleteRiderSchema } from "../validation/rider";
+import Rider from "../models/rider";
 import Account from "../models/account";
 
 dotenv.config();
 
 const options = { abortEarly: false, stripUnknown: true };
 
-export let parterRoute = [
+export let riderRoute = [
   {
     method: "POST",
     path: "/",
     options: {
       auth: "jwt",
-      description: "Create a Partner",
-      plugins: createPartnerSwagger,
-      tags: ["api", "bookingCall"],
+      description: "Create a Rider",
+      plugins: createRiderSwagger,
+      tags: ["api", "rider"],
       validate: {
-        payload: createPartnerSchema,
+        payload: createRiderSchema,
         options,
         failAction: (request, h, error) => {
           const details = error.details.map((d) => {
@@ -49,33 +46,31 @@ export let parterRoute = [
             .response({ status: 404, message: "Not Found User Account." })
             .code(404);
         }
-        const exitPartner = request.payload["_id"]
-          ? await Partner.findById(request.payload["_id"])
+        const exitRider = request.payload["_id"]
+          ? await Rider.findById(request.payload["_id"])
           : null;
-        if (exitPartner) {
-          exitPartner.date = request.payload["date"];
-          exitPartner.brandName = request.payload["brandName"];
-          exitPartner.productName = request.payload["productName"];
-          exitPartner.phoneNumber = request.payload["phoneNumber"];
-          exitPartner.bankName = request.payload["bankName"];
-          exitPartner.accountName = request.payload["accountName"];
-          exitPartner.accountNumber = request.payload["accountNumber"];
-          await exitPartner.save();
-          return response
-            .response({ status: "ok", data: exitPartner })
-            .code(201);
+        if (exitRider) {
+          exitRider.date = request.payload["date"];
+          exitRider.name = request.payload["name"];
+          exitRider.referrencedBy = request.payload["referrencedBy"];
+          exitRider.phoneNumber = request.payload["phoneNumber"];
+          exitRider.bankName = request.payload["bankName"];
+          exitRider.accountName = request.payload["accountName"];
+          exitRider.accountNumber = request.payload["accountNumber"];
+          await exitRider.save();
+          return response.response({ status: "ok", data: exitRider }).code(201);
         } else {
-          const partner = new Partner({
+          const rider = new Rider({
             date: request.payload["date"],
-            brandName: request.payload["brandName"],
-            productName: request.payload["productName"],
+            name: request.payload["name"],
+            referrencedBy: request.payload["referrencedBy"],
             phoneNumber: request.payload["phoneNumber"],
             bankName: request.payload["bankName"],
             accountName: request.payload["accountName"],
             accountNumber: request.payload["accountNumber"],
           });
-          await partner.save();
-          return response.response({ status: "ok", data: partner }).code(201);
+          await rider.save();
+          return response.response({ status: "ok", data: rider }).code(201);
         }
       } catch (error) {
         console.log(error);
@@ -88,9 +83,9 @@ export let parterRoute = [
     path: "/",
     options: {
       auth: "jwt",
-      description: "Get All Parters",
-      plugins: getPartnerSwagger,
-      tags: ["api", "bookingCall"],
+      description: "Get All Riders",
+      plugins: getRiderSwagger,
+      tags: ["api", "rider"],
     },
 
     handler: async (request: Request, response: ResponseToolkit) => {
@@ -98,14 +93,13 @@ export let parterRoute = [
         const account = await Account.findOne({
           email: request.auth.credentials.email,
         });
-
         if (!account) {
           return response
             .response({ status: 404, message: "Not Found User Account." })
             .code(404);
         }
-        const parters = await Partner.find()
-        return response.response({ status: "ok", data: parters }).code(200);
+        const riders = await Rider.find();
+        return response.response({ status: "ok", data: riders }).code(200);
       } catch (error) {
         console.log(error);
         return response.response(error).code(500);
@@ -115,12 +109,12 @@ export let parterRoute = [
 
   {
     method: "DELETE",
-    path: "/{partnerId}",
+    path: "/{riderId}",
     options: {
       auth: "jwt",
-      description: "Delete a partner",
-      plugins: deletePartnerSwagger,
-      tags: ["api", "bookingCall"],
+      description: "Delete a Rider",
+      plugins: deleteRiderSwagger,
+      tags: ["api", "rider"],
     },
 
     handler: async (request: Request, response: ResponseToolkit) => {
@@ -129,12 +123,12 @@ export let parterRoute = [
           email: request.auth.credentials.email,
         });
 
-        const deletedPartner = await Partner.deleteOne({
-          _id: request.params.partnerId,
+        const deletedRider = await Rider.deleteOne({
+          _id: request.params.riderId,
         });
-        console.log(deletedPartner.deletedCount);
+        console.log(deletedRider.deletedCount);
 
-        if (!deletedPartner.deletedCount) {
+        if (!deletedRider.deletedCount) {
           return response
             .response({
               status: "err",
@@ -145,7 +139,7 @@ export let parterRoute = [
           return response
             .response({
               status: "ok",
-              data: deletedPartner,
+              data: deletedRider,
             })
             .code(200);
         }

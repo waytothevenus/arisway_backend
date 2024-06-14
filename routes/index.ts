@@ -15,6 +15,7 @@ import { contractRoute } from "./contract";
 import { parterRoute } from "./partner";
 import { paymentRoute } from "./payment";
 import { riderRoute } from "./rider";
+import { orderRoute } from "./order";
 // const prefix = `/api/${config.apiVersion}`;
 
 const setRoutes = async (server: Server) => {
@@ -42,6 +43,8 @@ const setRoutes = async (server: Server) => {
   server.route(parterRoute);
   server.realm.modifiers.route.prefix = `/api/${config.apiVersion}/rider`;
   server.route(riderRoute);
+  server.realm.modifiers.route.prefix = `/api/${config.apiVersion}/order`;
+  server.route(orderRoute);
   server.realm.modifiers.route.prefix = `/api/${config.apiVersion}/payment`;
   server.route(paymentRoute);
 };

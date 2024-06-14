@@ -4,35 +4,39 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const PartnerSchema = new Schema({
-  date: {
-    type: Date,
+const OrderSchema = new Schema({
+  partnerName: {
+    type: String,
     required: true,
   },
-  brandName: {
+  customerName: {
     type: String,
     required: true,
   },
   productName: {
     type: Array,
   },
-  phoneNumber: {
+  amount: {
     type: String,
     required: false,
   },
-  bankName: {
+  location: {
     type: String,
     required: false,
   },
-  accountName: {
+  assign: {
     type: String,
     required: true,
   },
-  accountNumber: {
+  deliveryStatus: {
+    type: String,
+    required: false,
+  },
+  status: {
     type: String,
     required: false,
   },
 });
 
-const Parter = mongoose.model("partner", PartnerSchema);
+const Parter = mongoose.model("order", OrderSchema);
 export default Parter;

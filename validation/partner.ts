@@ -1,7 +1,9 @@
 import Joi from "joi";
 
-
 export const createPartnerSchema = Joi.object({
+  _id: Joi.string().optional().allow("").messages({
+    "any.required": "Please provide _id",
+  }),
   date: Joi.string().required().messages({
     "any.required": "Please provide Date",
   }),
@@ -11,7 +13,7 @@ export const createPartnerSchema = Joi.object({
   }),
 
   productName: Joi.array().allow(null).messages({
-    'any.requried': "Please provide Product Name"
+    "any.requried": "Please provide Product Name",
   }),
 
   phoneNumber: Joi.string().optional().messages({
@@ -33,4 +35,3 @@ export const deletePartnerSchema = Joi.object({
     "any.required": "Please provide Partner Id",
   }),
 });
-

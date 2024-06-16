@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const createPartnerSchema = Joi.object({
+export const createRiderSchema = Joi.object({
   _id: Joi.string().optional().allow("").messages({
     "any.required": "Please provide _id",
   }),
@@ -8,16 +8,15 @@ export const createPartnerSchema = Joi.object({
     "any.required": "Please provide Date",
   }),
 
-  brandName: Joi.string().required().messages({
+  name: Joi.string().required().messages({
     "any.required": "Please provie Brand Name",
-  }),
-
-  productName: Joi.array().allow(null).messages({
-    "any.requried": "Please provide Product Name",
   }),
 
   phoneNumber: Joi.string().optional().messages({
     "any.required": "Please provide Phone Number",
+  }),
+  referrencedBy: Joi.string().optional().messages({
+    "any.required": "Please provide Refferenced By",
   }),
   bankName: Joi.string().optional().messages({
     "any.required": "Please provide Bank Name",
@@ -30,8 +29,8 @@ export const createPartnerSchema = Joi.object({
   }),
 });
 
-export const deletePartnerSchema = Joi.object({
-  partnerId: Joi.string().required().messages({
-    "any.required": "Please provide Partner Id",
+export const deleteRiderSchema = Joi.object({
+  riderId: Joi.string().required().messages({
+    "any.required": "Please provide Rider Id",
   }),
 });

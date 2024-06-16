@@ -4,19 +4,20 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const PartnerSchema = new Schema({
+const RiderSchema = new Schema({
   date: {
     type: Date,
     required: true,
   },
-  brandName: {
+  name: {
     type: String,
     required: true,
   },
-  productName: {
-    type: Array,
-  },
   phoneNumber: {
+    type: String,
+    required: false,
+  },
+  referrencedBy: {
     type: String,
     required: false,
   },
@@ -34,5 +35,5 @@ const PartnerSchema = new Schema({
   },
 });
 
-const Parter = mongoose.model("partner", PartnerSchema);
-export default Parter;
+const Rider = mongoose.model("rider", RiderSchema);
+export default Rider;
